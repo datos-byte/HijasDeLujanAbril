@@ -140,9 +140,83 @@ hr.divider { border: none; border-top: 1px solid var(--border); margin: 1.8rem 0
 
 /* FOOTER */
 .site-footer { margin-top: 3rem; padding-top: 1.2rem; border-top: 1px solid var(--border); font-family: var(--f-mono); font-size: 10.5px; color: var(--ink3); display: flex; gap: 2rem; flex-wrap: wrap; line-height: 1.8; }
+
+#loginScreen{
+  position:fixed;
+  inset:0;
+  background:#F2F4F5;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:99999;
+}
+
+.login-card{
+  width:420px;
+  max-width:90%;
+  background:#fff;
+  padding:40px;
+  border-radius:12px;
+  box-shadow:0 10px 30px rgba(0,0,0,.12);
+  text-align:center;
+}
+
+.login-card h1{
+  font-size:28px;
+  margin-bottom:10px;
+}
+
+.login-card p{
+  margin-bottom:25px;
+  color:#5D7A8C;
+}
+
+.login-card input{
+  width:100%;
+  padding:12px;
+  border:1px solid #D8E0E5;
+  border-radius:6px;
+  margin-bottom:15px;
+}
+
+.login-card button{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:6px;
+  background:#2C3E50;
+  color:white;
+  cursor:pointer;
+}
+
+#loginError{
+  margin-top:10px;
+  color:#C0392B;
+}
 </style>
 </head>
 <body>
+  <body>
+
+<div id="loginScreen">
+  <div class="login-card">
+    <h1>Fundación Educación y Misión</h1>
+    <p>Informe Económico-Financiero</p>
+
+    <input
+      type="password"
+      id="passwordInput"
+      placeholder="Ingrese la contraseña"
+      onkeypress="if(event.key==='Enter') validarAcceso()"
+    >
+
+    <button onclick="validarAcceso()">Ingresar</button>
+
+    <div id="loginError"></div>
+  </div>
+</div>
+
+<div id="contenidoInforme" style="display:none;">
 <div class="shell">
 
 <header class="site-header">
@@ -506,6 +580,29 @@ function showPanel(id,btn) {
 buildKpiResumen(); buildBarsAporte(); buildChartIngresosResumen();
 buildKpiCierre(); buildCierreGrid(); buildChartCierre();
 buildKpiDeudas(); buildTablaDeudas(); buildChartDeudas();
+</script>
+  </div>
+
+<script>
+function validarAcceso() {
+
+  const PASSWORD = "FEM2026$";
+
+  const ingreso =
+    document.getElementById("passwordInput").value;
+
+  if (ingreso === PASSWORD) {
+
+    document.getElementById("loginScreen").style.display = "none";
+    document.getElementById("contenidoInforme").style.display = "block";
+
+  } else {
+
+    document.getElementById("loginError").innerHTML =
+      "Contraseña incorrecta";
+
+  }
+}
 </script>
 </body>
 </html>
