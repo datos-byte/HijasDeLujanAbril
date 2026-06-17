@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe Económico-Financiero — Congregación Hijas de Luján 2026</title>
+<style>
+:root {
+  --ink:      #1C1A17;
+  --ink2:     #3D3A34;
+  --ink3:     #6B6760;
+  --paper:    #F5F0E8;
+  --paper2:   #EDE7D9;
+  --paper3:   #E0D8C8;
+  --ochre:    #C8922A;
+  --ochre-lt: #F0D9A8;
+  --ochre-dk: #8C6218;
+  --terra:    #B85C38;
+  --terra-lt: #F0CDBF;
+  --terra-dk: #7A3520;
+  --sage:     #5A7A6A;
+  --sage-lt:  #C8DDD4;
+  --sage-dk:  #2E4A3C;
+  --slate:    #3A4E5C;
+  --slate-lt: #C2CDD4;
+  --slate-dk: #1E2F38;
+  --border:   rgba(28,26,23,0.12);
+  --border2:  rgba(28,26,23,0.22);
+  --f-serif:  Georgia, 'Times New Roman', serif;
+  --f-mono:   'Consolas', 'Courier New', monospace;
+  --f-sans:   -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--paper); color: var(--ink); font-family: var(--f-sans); font-size: 14px; line-height: 1.6; }
+.shell { max-width: 1200px; margin: 0 auto; padding: 0 2rem 4rem; }
+
+/* HEADER */
+.site-header { border-bottom: 1.5px solid var(--ink); padding: 2.5rem 0 1.5rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; }
+.site-header h1 { font-family: var(--f-serif); font-size: 2.4rem; font-weight: 400; line-height: 1.1; max-width: 560px; }
+.site-header h1 em { font-style: italic; color: var(--ochre-dk); }
+.header-meta { text-align: right; font-family: var(--f-mono); font-size: 11px; color: var(--ink3); line-height: 1.8; white-space: nowrap; }
+
+/* NAV */
+.nav-strip { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem; }
+.nav-btn { background: transparent; border: 1px solid var(--border2); border-radius: 3px; padding: 5px 13px; font-family: var(--f-sans); font-size: 11.5px; color: var(--ink3); cursor: pointer; transition: all 0.15s; }
+.nav-btn:hover { background: var(--paper2); color: var(--ink); }
+.nav-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+/* PANELS */
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* KPI */
+.kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(155px, 1fr)); gap: 10px; margin-bottom: 2rem; }
+.kpi { background: var(--paper2); border: 1px solid var(--border); border-radius: 4px; padding: .9rem 1rem; }
+.kpi-label { font-family: var(--f-mono); font-size: 9.5px; color: var(--ink3); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 5px; }
+.kpi-value { font-family: var(--f-serif); font-size: 1.75rem; color: var(--ink); line-height: 1; }
+.kpi-sub { font-size: 10.5px; color: var(--ink3); margin-top: 4px; }
+.kpi.kpi-warn .kpi-value { color: var(--terra); }
+.kpi.kpi-ok   .kpi-value { color: var(--sage-dk); }
+.kpi.kpi-accent .kpi-value { color: var(--ochre-dk); }
+
+/* SECTION HEAD */
+.section-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 1rem; }
+.section-head h2 { font-family: var(--f-serif); font-size: 1.2rem; font-weight: 400; }
+.section-head span { font-family: var(--f-mono); font-size: 9.5px; color: var(--ink3); text-transform: uppercase; letter-spacing: .06em; }
+
+/* CHARTS */
+.chart-legend { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 9px; font-family: var(--f-mono); font-size: 10.5px; color: var(--ink2); }
+.chart-legend span { display: flex; align-items: center; gap: 5px; }
+.leg-sq { width: 9px; height: 9px; border-radius: 2px; }
+.chart-wrap { position: relative; width: 100%; }
+
+/* PENDIENTE BADGE */
+.tag-pend  { display:inline-block; font-family:var(--f-mono); font-size:8.5px; letter-spacing:.02em; padding:1px 5px; border-radius:2px; border:1.2px dashed var(--slate); color:var(--slate-dk); margin-left:6px; vertical-align:1px; font-style:italic; white-space:nowrap; }
+
+/* PILLS */
+.pill { display: inline-block; font-family: var(--f-mono); font-size: 9.5px; padding: 2px 7px; border-radius: 2px; font-weight: 500; }
+.pill-crit { background: var(--terra); color:#fff; }
+.pill-warn { background: var(--ochre); color:#fff; }
+.pill-ok   { background: var(--sage);  color:#fff; }
+
+/* TABLE */
+.tbl-wrap { overflow-x: auto; margin-bottom: 2rem; }
+.tbl-wrap::-webkit-scrollbar { height: 3px; }
+.tbl-wrap::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+table.data { width: 100%; border-collapse: collapse; font-size: 12px; }
+table.data thead tr { border-bottom: 1.5px solid var(--ink); }
+table.data th { font-family: var(--f-mono); font-size: 9.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--ink3); padding: 7px 9px; text-align: left; white-space: nowrap; }
+table.data th.num { text-align: right; }
+table.data td { padding: 7px 9px; border-bottom: 1px solid var(--border); color: var(--ink2); white-space: nowrap; }
+table.data td.num { text-align: right; font-family: var(--f-mono); font-size: 11.5px; }
+table.data td.name { font-weight: 600; color: var(--ink); font-size: 12.5px; font-family: var(--f-sans); letter-spacing: 0; }
+table.data tr:hover td { background: var(--paper2); }
+table.data tr.row-crit td { background: rgba(184,92,56,.07); }
+table.data tr.row-warn td { background: rgba(200,146,42,.07); }
+table.data tr.row-ok   td { background: rgba(90,122,106,.06); }
+
+/* BAR LIST */
+.bar-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 2rem; }
+.bar-row { display: grid; grid-template-columns: 130px 1fr 70px; align-items: center; gap: 10px; }
+.bar-label { font-size: 12px; color: var(--ink2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bar-track { background: var(--paper3); border-radius: 2px; height: 9px; overflow: hidden; position: relative; }
+.bar-fill { height: 100%; border-radius: 2px; transition: width .3s; }
+.bar-val { font-family: var(--f-mono); font-size: 11px; color: var(--ink3); text-align: right; }
+
+/* CIERRE CARDS */
+.cierre-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(285px, 1fr)); gap: 12px; margin-bottom: 2rem; }
+.cierre-card { background: var(--paper2); border: 1px solid var(--border); border-radius: 4px; padding: .9rem 1.1rem; }
+.cierre-card.cierra    { border-left: 4px solid var(--sage); }
+.cierre-card.no-cierra { border-left: 4px solid var(--terra); }
+.cierre-card.marginal  { border-left: 4px solid var(--ochre); }
+.cierre-nombre { font-weight: 700; font-size: 13px; margin-bottom: 7px; color: var(--ink); font-family: var(--f-sans); letter-spacing: 0; word-spacing: normal; }
+.cierre-row { display: flex; justify-content: space-between; font-size: 11.5px; padding: 3px 0; border-bottom: 1px solid var(--border); }
+.cierre-row:last-child { border-bottom: none; }
+.cierre-row .lbl { color: var(--ink3); }
+.cierre-row .val { font-family: var(--f-mono); font-size: 11px; }
+.cierre-row.bold .lbl { color: var(--ink2); font-weight: 600; }
+.cierre-row.bold .val { font-weight: 600; }
+.cierre-divider { border: none; border-top: 1.5px dashed var(--border2); margin: 7px 0 5px; }
+.cierre-resultado { margin-top: 5px; padding: 5px 9px; border-radius: 3px; font-family: var(--f-mono); font-size: 11.5px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
+.cierre-resultado .res-label { font-size: 9.5px; font-weight: 400; opacity: .8; }
+.res-pos  { background: var(--sage-lt);  color: var(--sage-dk); }
+.res-neg  { background: var(--terra-lt); color: var(--terra-dk); }
+.res-zero { background: var(--ochre-lt); color: var(--ochre-dk); }
+.cierre-tipo { margin-top: 5px; font-size: 9.5px; font-family: var(--f-mono); text-align: center; padding: 3px 6px; border-radius: 2px; }
+.tipo-ok          { background: var(--sage-lt);  color: var(--sage-dk); }
+.tipo-ajustado    { background: var(--ochre-lt); color: var(--ochre-dk); }
+.tipo-nocierra    { background: var(--terra-lt); color: var(--terra-dk); }
+.cierre-nota { font-size:10.5px; color:var(--ochre-dk); background:var(--ochre-lt); border-left:3px solid var(--ochre); padding:5px 8px; margin-top:6px; border-radius:0 3px 3px 0; }
+
+/* CALLOUT */
+.callout { background: var(--ink); color: var(--paper); border-radius: 4px; padding: 1.1rem 1.4rem; margin-bottom: 1.8rem; }
+.callout-label { font-family: var(--f-mono); font-size: 9.5px; color: var(--ochre-lt); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 5px; }
+.callout p { font-size: 12.5px; line-height: 1.7; color: var(--paper2); }
+.callout strong { color: var(--ochre-lt); }
+
+/* MISC */
+hr.divider { border: none; border-top: 1px solid var(--border); margin: 1.8rem 0; }
+
+/* FOOTER */
+.site-footer { margin-top: 3rem; padding-top: 1.2rem; border-top: 1px solid var(--border); font-family: var(--f-mono); font-size: 10.5px; color: var(--ink3); display: flex; gap: 2rem; flex-wrap: wrap; line-height: 1.8; }
+</style>
+</head>
+<body>
+<div class="shell">
+
+<header class="site-header">
+  <div style="display:flex;align-items:center;gap:1.4rem">
+    <img src="data:image/png;base64,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" alt="FEM — Fundación Educación y Misión" style="height:64px;width:auto;flex-shrink:0">
+    <h1>Informe económico-financiero<br><em>Congregación Hijas de Luján</em></h1>
+  </div>
+  <div class="header-meta">
+    Datos: abril 2026 (flujo) · feb 2026 (alumnos y deudores)<br>
+    9 instituciones · Red educativa<br>
+    Fuente: seguimiento mensual abril + Resumen Económico-Financiero feb<br>
+    Elaborado: junio 2026
+  </div>
+</header>
+
+<nav class="nav-strip">
+  <button class="nav-btn active" onclick="showPanel('resumen',this)">Resumen ejecutivo</button>
+  <button class="nav-btn" onclick="showPanel('cierre',this)">Cierre operativo</button>
+  <button class="nav-btn" onclick="showPanel('deudas',this)">Deuda</button>
+</nav>
+
+<!-- RESUMEN EJECUTIVO -->
+<section id="panel-resumen" class="panel active">
+  <div id="kpiResumen" class="kpi-row"></div>
+  <div class="callout">
+    <div class="callout-label">Marco de análisis</div>
+    <p>El <strong>aporte estatal es la base estructural del modelo</strong>. La pregunta operativa es si los ingresos propios (cobrado en cuotas + otros ingresos) cubren la brecha laboral más los gastos generales. Cadena de cálculo: <strong>costo laboral (con aguinaldo) − aporte estatal (con aguinaldo) = brecha laboral</strong>. Brecha + gastos generales = <strong>necesidad total</strong>. Necesidad − ingresos propios cobrados = <strong>resultado del mes</strong>. El estado de cada institución se define por ese resultado.</p>
+  </div>
+  <div class="callout" style="background:var(--slate-dk)">
+    <div class="callout-label" style="color:var(--ochre-lt)">Actualización abril 2026 — leer antes de interpretar el resto del informe</div>
+    <p><strong>Qué se actualizó:</strong> aporte estatal, cobrado en cuotas, sueldos y gastos generales pasan a valores de <strong>abril 2026</strong> (planilla de seguimiento mensual, totales directos sin estimación). <strong>Qué sigue en feb 2026:</strong> alumnos (para el total del grupo) y deudores acumulados — esa planilla no los releva.</p>
+    <p style="margin-top:8px"><strong>Merlo y Hogar San José</strong> figuran "Sin informar" en la planilla de abril. Se muestran con sus valores de abril igual, marcados <span class="tag-pend">pendiente</span> en el informe, hasta que se confirmen oficialmente.</p>
+    <p style="margin-top:8px">El alquiler del campo de Hogar San José (~$26,6M/mes) se mantiene como otros ingresos al valor de feb: la institución confirma que continúa, solo que no está relevado en esta planilla mensual.</p>
+  </div>
+  <div class="section-head">
+    <h2>Cobertura del aporte estatal sobre el costo laboral</h2>
+    <span>Ratio aporte / costo laboral · abril 2026 · referencia 85%</span>
+  </div>
+  <div class="bar-list" id="barsAporte"></div>
+  <hr class="divider">
+  <div class="section-head">
+    <h2>Composición de ingresos por institución</h2>
+    <span>Millones de $ · abril 2026</span>
+  </div>
+  <div class="chart-legend">
+    <span><span class="leg-sq" style="background:#5A7A6A"></span>Aporte estatal</span>
+    <span><span class="leg-sq" style="background:#C8922A"></span>Cobrado cuotas</span>
+    <span><span class="leg-sq" style="background:#3A4E5C"></span>Otros ingresos</span>
+  </div>
+  <div class="chart-wrap" style="height:290px"><canvas id="cIngresosResumen"></canvas></div>
+</section>
+
+<!-- CIERRE OPERATIVO -->
+<section id="panel-cierre" class="panel">
+  <div id="kpiCierre" class="kpi-row"></div>
+  <div class="callout">
+    <div class="callout-label">Cómo leer cada tarjeta</div>
+    <p>Esta lectura evalúa si cada institución, con lo que efectivamente cobra y recibe de aporte estatal, cubre su costo laboral y sus gastos generales del mes. <strong>No incorpora la deuda previsional acumulada con organismos del Estado</strong> — esa dimensión queda fuera del alcance de este informe. El objetivo es entender si la institución, tal como está hoy, es autosustentable o no.</p>
+    <p style="margin-top:8px">Cadena de cálculo: <strong>costo laboral (con aguinaldo) − aporte estatal (con aguinaldo) = brecha laboral</strong>. Brecha + gastos generales = <strong>necesidad total</strong>. Necesidad − ingresos propios cobrados = <strong>resultado del mes</strong>.</p>
+  </div>
+  <div class="cierre-grid" id="cierreGrid"></div>
+  <hr class="divider">
+  <div class="section-head"><h2>Necesidad total vs ingresos</h2><span>Millones de $ · abril 2026</span></div>
+  <div class="chart-legend">
+    <span><span class="leg-sq" style="background:#B85C38"></span>Brecha laboral</span>
+    <span><span class="leg-sq" style="background:#C8922A"></span>Gastos generales</span>
+    <span><span class="leg-sq" style="background:#C8922A"></span>Ingresos propios cobrados</span>
+  </div>
+  <div class="chart-wrap" style="height:310px"><canvas id="cCierre"></canvas></div>
+</section>
+
+<!-- DEUDA -->
+<section id="panel-deudas" class="panel">
+  <div id="kpiDeudas" class="kpi-row"></div>
+  <div class="callout">
+    <div class="callout-label">Advertencia metodológica</div>
+    <p>Los valores de Moreno ($247,5M) y Villa Madero ($168,3M) son <strong>nominales</strong>, sin intereses ni punitorios. La deuda real exigible con IPS y AFIP puede ser sustancialmente mayor según antigüedad. La deuda de Calle 60 ($85M) es un valor <strong>aproximado sin apertura por componente</strong>: no es posible estimar intereses ni definir plan de regularización sin ese detalle. Marcos Paz registra un juicio laboral de <strong>$60M como pasivo contingente</strong>, no deuda firme. Calle 60 aparece como "Crítico" y en abril <strong>también muestra déficit de flujo operativo</strong> (-$8,0M) — el problema ya no es solo patrimonial acumulado.</p>
+    <p style="margin-top:8px">El estado de cada institución se calcula como <strong>deuda total / costo laboral mensual de abril</strong> (por debajo de 0,5x: sólido · entre 0,5x y 1,5x: moderado · por encima: crítico). Esta deuda es de <strong>feb 2026, sin actualizar</strong> — la planilla mensual de abril no la releva.</p>
+  </div>
+  <div class="section-head"><h2>Deuda previsional por componente</h2><span>Millones de $ · valor nominal · feb 2026</span></div>
+  <div class="chart-legend">
+    <span><span class="leg-sq" style="background:#B85C38"></span>Cargas sociales</span>
+    <span><span class="leg-sq" style="background:#C8922A"></span>IPS</span>
+    <span><span class="leg-sq" style="background:#3A4E5C"></span>Aportes sindicales</span>
+    <span><span class="leg-sq" style="background:#8C6218"></span>Juicios / contingentes</span>
+    <span><span class="leg-sq" style="background:#7A3520"></span>Intimaciones</span>
+  </div>
+  <div class="chart-wrap" style="height:270px"><canvas id="cDeudas"></canvas></div>
+  <hr class="divider">
+  <div class="section-head"><h2>Detalle de deudas acumuladas</h2><span>Posición feb 2026 · valores nominales</span></div>
+  <div class="tbl-wrap">
+    <table class="data">
+      <thead><tr>
+        <th>Colegio</th>
+        <th class="num">Cargas soc.</th>
+        <th class="num">IPS</th>
+        <th class="num">Sindicatos</th>
+        <th class="num">Juicios</th>
+        <th class="num">Intimaciones $</th>
+        <th class="num">Total</th>
+        <th class="num">Meses costo lab.</th>
+        <th>Estado</th>
+      </tr></thead>
+      <tbody id="tablaDeudas"></tbody>
+    </table>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div>Fuente: Seguimiento mensual abril 2026 (flujo) · Resumen Económico-Financiero feb 2026 (alumnos y deudores)</div>
+  <div>Elaboración: Auditorías | Económico Financiero | CDA | FEM</div>
+  <div>Valores nominales</div>
+  <div>Versión de datos: v10 · Junio 2026</div>
+</footer>
+
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+/* ═══════════════════════════════════
+   DATOS v10 — flujo: planilla seguimiento abril 2026
+   alumnos y deudores acumulados: Excel v9, feb 2026 (sin actualizar)
+   unidades: M$
+   ═══════════════════════════════════ */
+const C = [
+  { n:'Calle 74',        l:'La Plata',       al:454,
+    aporte:25.53, cob:35.95, otros:0,
+    sueldos:38.67, gg:9.18, deu:16.1,
+    dCS:0.02, dIPS:0, dSi:0, dJu:0,
+    estadoMes:'Informado' },
+  { n:'Calle 60',        l:'La Plata',       al:420,
+    aporte:28.56, cob:28.02, otros:0,
+    sueldos:46.57, gg:16.53, deu:24.04,
+    dCS:0, dIPS:0, dSi:0, dJu:0, dAprox:85,
+    estadoMes:'Informado' },
+  { n:'Moreno',          l:'Moreno',         al:796,
+    aporte:48.94, cob:43.77, otros:0,
+    sueldos:107.91, gg:7.25, deu:30.53,
+    dCS:120.52, dIPS:63.78, dSi:40.58, dJu:0, dInt:22.58,
+    estadoMes:'Informado' },
+  { n:'Miramar',         l:'Miramar',        al:860,
+    aporte:52.10, cob:34.32, otros:0,
+    sueldos:73.67, gg:13.06, deu:38.3,
+    dCS:0.03, dIPS:0, dSi:0, dJu:0,
+    estadoMes:'Informado' },
+  { n:'3 Arroyos',       l:'3 Arroyos',      al:552,
+    aporte:40.24, cob:36.12, otros:0,
+    sueldos:55.78, gg:5.68, deu:10.63,
+    dCS:0.09, dIPS:0, dSi:0, dJu:0,
+    estadoMes:'Informado' },
+  { n:'Hogar San José',  l:'3 Arroyos',      al:410,
+    aporte:27.10, cob:11.25, otros:26.59,
+    sueldos:38.50, gg:7.30, deu:3.23,
+    dCS:0, dIPS:0, dSi:0, dJu:0,
+    estadoMes:'Sin informar' },
+  { n:'Merlo',           l:'Merlo',          al:673,
+    aporte:50.37, cob:60.00, otros:0,
+    sueldos:87.80, gg:7.50, deu:36.79,
+    dCS:0, dIPS:0, dSi:0, dJu:0,
+    estadoMes:'Sin informar' },
+  { n:'Marcos Paz',      l:'Marcos Paz',     al:803,
+    aporte:62.74, cob:55.89, otros:0.39,
+    sueldos:101.71, gg:15.78, deu:11.78,
+    dCS:7.38, dIPS:0, dSi:0, dJu:60.0,
+    estadoMes:'Informado' },
+  { n:'Villa Madero',    l:'Villa Madero',   al:514,
+    aporte:47.59, cob:44.12, otros:2.5,
+    sueldos:92.91, gg:15.94, deu:22.0,
+    dCS:80.08, dIPS:52.6, dSi:35.65, dJu:0,
+    estadoMes:'Informado' },
+];
+
+/* ── Cálculos ── */
+C.forEach(c => {
+  // Costo laboral con aguinaldo distribuido: sueldos × 13/12
+  c.cl       = +(c.sueldos * 13 / 12).toFixed(3);
+  // Aporte estatal ajustado × 13/12: el Estado también aporta sobre el aguinaldo
+  c.aporteAj = +(c.aporte * 13 / 12).toFixed(3);
+  c.br   = +(c.cl - c.aporteAj).toFixed(3);
+  c.nec  = +(c.br + c.gg).toFixed(3);
+  c.ing  = +(c.cob + c.otros).toFixed(3);
+  c.res  = +(c.ing - c.nec).toFixed(3);
+  c.apP  = c.cl > 0 ? Math.round(c.aporteAj/c.cl*100) : 0;
+  c.mora = c.cob > 0 ? +(c.deu / c.cob).toFixed(2) : null;
+  // Deuda previsional acumulada (feb 2026, sin actualizar) y su peso en meses de costo laboral de abril
+  c.dT       = +((c.dCS||0)+(c.dIPS||0)+(c.dSi||0)+(c.dJu||0)+(c.dInt||0)+(c.dAprox||0)).toFixed(2);
+  c.ratioCL  = c.dT > 0 && c.cl > 0 ? +(c.dT / c.cl).toFixed(2) : 0;
+  c.est      = c.dT === 0 ? 'ok' : c.ratioCL < 0.5 ? 'ok' : c.ratioCL < 1.5 ? 'warn' : 'crit';
+});
+
+const NMS = C.map(x=>x.n);
+const M   = (v,d=1) => v===0?'—':'$'+v.toLocaleString('es-AR',{minimumFractionDigits:d,maximumFractionDigits:d})+'M';
+// Marca instituciones cuyo dato de abril 2026 figura "Sin informar" en el Excel mensual
+const pend = c => c.estadoMes==='Sin informar' ? '<span class="tag-pend" title="Cifra de abril 2026 sin confirmación oficial">pendiente</span>' : '';
+const pill = e => e==='crit'?'<span class="pill pill-crit">Crítico</span>':e==='ok'?'<span class="pill pill-ok">Sólido</span>':'<span class="pill pill-warn">Moderado</span>';
+const rc   = e => e==='crit'?'row-crit':e==='warn'?'row-warn':'row-ok';
+
+/* ── KPI RESUMEN ── */
+function buildKpiResumen() {
+  const tCL  = C.reduce((s,c)=>s+c.cl,0);
+  const tAp  = C.reduce((s,c)=>s+c.aporteAj,0);
+  const tBr  = C.reduce((s,c)=>s+c.br,0);
+  const tGG  = C.reduce((s,c)=>s+c.gg,0);
+  const tNec = C.reduce((s,c)=>s+c.nec,0);
+  const tIng = C.reduce((s,c)=>s+c.cob,0);
+  const defAct = tNec - tIng;
+  const fmtDef = (v) => {
+    const abs = Math.abs(Math.round(v));
+    const lbl = v > 0 ? 'déficit' : 'superávit';
+    const cls = v > 0 ? 'kpi-warn' : 'kpi-ok';
+    return { abs, lbl, cls };
+  };
+  const dA = fmtDef(defAct);
+  document.getElementById('kpiResumen').innerHTML = `
+    <div class="kpi kpi-accent"><div class="kpi-label">Costo laboral grupo</div><div class="kpi-value">$${Math.round(tCL)}M</div><div class="kpi-sub">con aguinaldo distribuido · abril 2026</div></div>
+    <div class="kpi"><div class="kpi-label">Aportes estatales</div><div class="kpi-value">$${Math.round(tAp)}M</div><div class="kpi-sub">abril 2026 · ajustado × 13/12</div></div>
+    <div class="kpi kpi-warn"><div class="kpi-label">Brecha laboral grupo</div><div class="kpi-value">$${Math.round(tBr)}M</div><div class="kpi-sub">no cubierto por aporte · abril</div></div>
+    <div class="kpi"><div class="kpi-label">Gastos generales grupo</div><div class="kpi-value">$${Math.round(tGG)}M</div><div class="kpi-sub">abril 2026</div></div>
+    <div class="kpi kpi-warn"><div class="kpi-label">Necesidad total</div><div class="kpi-value">$${Math.round(tNec)}M</div><div class="kpi-sub">brecha + gastos generales · lo que hay que cubrir</div></div>
+    <div class="kpi kpi-accent"><div class="kpi-label">Cobrado en cuotas</div><div class="kpi-value">$${Math.round(tIng)}M</div><div class="kpi-sub">cuotas cobradas abril · excluye otros ingresos</div></div>
+    <div class="kpi ${dA.cls}"><div class="kpi-label">Déficit actual</div><div class="kpi-value">$${dA.abs.toLocaleString('es-AR')}M</div><div class="kpi-sub">necesidad − cobrado · ${dA.lbl} consolidado · Hogar incluye arrendamiento campo</div></div>
+    <div class="kpi"><div class="kpi-label">Total alumnos</div><div class="kpi-value">${C.reduce((s,c)=>s+c.al,0).toLocaleString('es-AR')}</div><div class="kpi-sub">feb 2026</div></div>`;
+}
+
+/* ── BARRAS APORTE ── */
+function buildBarsAporte() {
+  const s = [...C].sort((a,b)=>b.apP-a.apP);
+  document.getElementById('barsAporte').innerHTML = s.map(c => {
+    const clr = c.apP>=85?'#5A7A6A':c.apP>=70?'#C8922A':'#B85C38';
+    return `<div class="bar-row">
+      <div class="bar-label">${c.n}${pend(c)}</div>
+      <div class="bar-track">
+        <div class="bar-fill" style="width:${Math.min(c.apP,100)}%;background:${clr}"></div>
+        <div style="position:absolute;top:0;left:85%;width:1px;height:100%;background:var(--ink3);opacity:.4"></div>
+      </div>
+      <div class="bar-val">${c.apP}%</div>
+    </div>`;
+  }).join('');
+}
+
+/* ── KPI CIERRE ── */
+function buildKpiCierre() {
+  const cH  = C.filter(c=>c.res>=-0.5);
+  const ncH = C.filter(c=>c.res<-0.5);
+  const sup = cH.reduce((s,c)=>s+Math.max(0,c.res),0).toFixed(1);
+  const def = ncH.reduce((s,c)=>s+Math.abs(c.res),0).toFixed(1);
+  document.getElementById('kpiCierre').innerHTML = `
+    <div class="kpi kpi-ok"><div class="kpi-label">Cierran hoy</div><div class="kpi-value">${cH.length} / 9</div><div class="kpi-sub">${cH.map(c=>c.n+pend(c)).join(' · ')}</div></div>
+    <div class="kpi kpi-warn"><div class="kpi-label">No cierran hoy</div><div class="kpi-value">${ncH.length} / 9</div><div class="kpi-sub">${ncH.map(c=>c.n+pend(c)).join(' · ')}</div></div>
+    <div class="kpi"><div class="kpi-label">Superávit consolidado</div><div class="kpi-value">$${(+sup).toLocaleString('es-AR',{maximumFractionDigits:0})}M</div><div class="kpi-sub">suma de resultados positivos</div></div>
+    <div class="kpi kpi-warn"><div class="kpi-label">Déficit consolidado</div><div class="kpi-value">$${(+def).toLocaleString('es-AR',{maximumFractionDigits:0})}M</div><div class="kpi-sub">suma de brechas no cubiertas</div></div>`;
+}
+
+/* ── CIERRE GRID ── */
+function buildCierreGrid() {
+  const s = [...C].sort((a,b)=>b.res-a.res);
+  document.getElementById('cierreGrid').innerHTML = s.map(c => {
+    const cls   = c.res>0.5?'cierra':c.res<-0.5?'no-cierra':'marginal';
+    const rCls  = c.res>0.5?'res-pos':c.res<-0.5?'res-neg':'res-zero';
+    const rStr  = (c.res>=0?'+':'')+c.res.toLocaleString('es-AR',{minimumFractionDigits:1})+'M';
+    const mora  = c.mora!==null ? c.mora.toFixed(1)+'x cobrado' : '—';
+    const tipoCls = c.res>0.5?'ok':c.res<-0.5?'nocierra':'ajustado';
+    const tLbl    = c.res>0.5?'✓ Cierra':c.res<-0.5?'✗ No cierra':'≈ Resultado ajustado';
+    const notaEsp = c.n==='Villa Madero' ? '<div class="cierre-nota">⚠ Deudores acumulados equivalen a 0,5x lo cobrado · seguimiento recomendado</div>' : '';
+    return `<div class="cierre-card ${cls}">
+      <div class="cierre-nombre">${c.n}${pend(c)} <span style="font-weight:400;color:var(--ink3);font-size:10.5px">${c.l}</span></div>
+      <div class="cierre-row"><span class="lbl">Costo laboral <span style="font-size:9px;color:var(--ink3)">(c/aguinaldo)</span></span><span class="val">${M(c.cl)}</span></div>
+      <div class="cierre-row"><span class="lbl">Aporte estatal <span style="font-size:9px;color:var(--ink3)">(c/aguinaldo)</span></span><span class="val" style="color:var(--sage-dk)">${M(c.aporteAj)}</span></div>
+      <div class="cierre-row bold"><span class="lbl">Brecha laboral</span><span class="val" style="color:var(--terra-dk)">${M(c.br)}</span></div>
+      <div class="cierre-row"><span class="lbl">Gastos generales</span><span class="val">${M(c.gg)}</span></div>
+      <div class="cierre-row bold" style="border-bottom:1.5px solid var(--ink3)"><span class="lbl">Necesidad total</span><span class="val">${M(c.nec)}</span></div>
+      <hr class="cierre-divider">
+      <div class="cierre-row"><span class="lbl">Ing. propios cobrados</span><span class="val" style="color:var(--ochre-dk)">${c.ing>0?M(c.ing):'$0 —'}</span></div>
+      <div class="cierre-resultado ${rCls}"><span class="res-label">Resultado del mes</span><span>${rStr}</span></div>
+      <hr class="cierre-divider">
+      <div class="cierre-row"><span class="lbl">Deudores acumulados <span style="font-size:9px;color:var(--ink3)">(feb)</span></span><span class="val" style="color:var(--ochre-dk)">${M(c.deu)}</span></div>
+      <div class="cierre-row"><span class="lbl">Relación con cobrado</span><span class="val">${mora}</span></div>
+      <div class="cierre-tipo tipo-${tipoCls}">${tLbl}</div>
+      ${notaEsp}
+    </div>`;
+  }).join('');
+}
+
+/* ── CHARTS ── */
+const OPT = { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}} };
+
+function buildChartIngresosResumen() {
+  new Chart(document.getElementById('cIngresosResumen'),{
+    type:'bar',
+    data:{ labels:NMS, datasets:[
+      {label:'Aporte estatal', data:C.map(c=>c.aporteAj), backgroundColor:'#5A7A6A', borderRadius:2, stack:'actual'},
+      {label:'Cobrado cuotas', data:C.map(c=>c.cob),    backgroundColor:'#C8922A', borderRadius:2, stack:'actual'},
+      {label:'Otros ingresos', data:C.map(c=>c.otros),  backgroundColor:'#3A4E5C', borderRadius:2, stack:'actual'},
+    ]},
+    options:{ ...OPT, scales:{
+      x:{stacked:true, ticks:{font:{size:10.5},maxRotation:30}},
+      y:{stacked:true, ticks:{callback:v=>'$'+v+'M',font:{size:10.5}}}
+    }}
+  });
+}
+function buildChartCierre() {
+  new Chart(document.getElementById('cCierre'),{ type:'bar', data:{ labels:NMS, datasets:[
+    {label:'Brecha laboral',data:C.map(c=>c.br),backgroundColor:'#B85C38',borderRadius:2},
+    {label:'Gastos generales',data:C.map(c=>c.gg),backgroundColor:'#C8922A',borderRadius:2},
+    {label:'Ing. cobrados',data:C.map(c=>-c.ing),backgroundColor:'#2E4A3C',borderRadius:2},
+  ]}, options:{ ...OPT, scales:{ x:{ticks:{font:{size:10.5},maxRotation:30}}, y:{ticks:{callback:v=>'$'+Math.abs(v)+'M',font:{size:10.5}}} } } });
+}
+
+/* ── KPI DEUDAS ── */
+function buildKpiDeudas() {
+  const tD  = C.reduce((s,c)=>s+c.dT,0).toFixed(0);
+  const mo  = C.find(c=>c.n==='Moreno');
+  const vm  = C.find(c=>c.n==='Villa Madero');
+  const rest= C.filter(c=>c.n!=='Moreno'&&c.n!=='Villa Madero').reduce((s,c)=>s+c.dT,0).toFixed(1);
+  document.getElementById('kpiDeudas').innerHTML = `
+    <div class="kpi kpi-warn"><div class="kpi-label">Deuda total grupo</div><div class="kpi-value">$${(+tD).toLocaleString('es-AR',{maximumFractionDigits:0})}M</div><div class="kpi-sub">valor nominal sin intereses · feb 2026</div></div>
+    <div class="kpi kpi-warn"><div class="kpi-label">Moreno</div><div class="kpi-value">${M(mo.dT)}</div><div class="kpi-sub">${(mo.dT/mo.cl).toFixed(1)}x meses de costo laboral</div></div>
+    <div class="kpi kpi-warn"><div class="kpi-label">Villa Madero</div><div class="kpi-value">${M(vm.dT)}</div><div class="kpi-sub">${(vm.dT/vm.cl).toFixed(1)}x meses de costo laboral</div></div>
+    <div class="kpi"><div class="kpi-label">Resto del grupo</div><div class="kpi-value">$${(+rest).toLocaleString('es-AR',{maximumFractionDigits:0})}M</div><div class="kpi-sub">7 colegios combinados</div></div>`;
+}
+
+/* ── TABLA DEUDAS ── */
+function buildTablaDeudas() {
+  document.getElementById('tablaDeudas').innerHTML = C.map(c => {
+    const r   = rc(c.est);
+    const mrm = c.cl > 0 && c.dT > 0 ? c.ratioCL.toFixed(1)+'x' : '—';
+    const mrmClr = c.est==='crit'?'color:var(--terra-dk)':c.est==='warn'?'color:var(--ochre-dk)':'color:var(--sage-dk)';
+    return `<tr class="${r}">
+      <td class="name">${c.n}${pend(c)}</td>
+      <td class="num">${c.dCS>0?M(c.dCS):'—'}</td>
+      <td class="num">${c.dIPS>0?M(c.dIPS):'—'}</td>
+      <td class="num">${c.dSi>0?M(c.dSi):'—'}</td>
+      <td class="num">${c.dJu>0?M(c.dJu):'—'}</td>
+      <td class="num">${(c.dInt||0)>0?M(c.dInt||0):'—'}</td>
+      <td class="num">${c.dT>0?M(c.dT):'—'}</td>
+      <td class="num" style="${mrmClr};font-weight:600">${mrm}</td>
+      <td>${pill(c.est)}</td>
+    </tr>`;
+  }).join('');
+}
+
+/* ── CHART DEUDAS ── */
+function buildChartDeudas() {
+  new Chart(document.getElementById('cDeudas'),{ type:'bar', data:{ labels:NMS, datasets:[
+    {label:'Cargas sociales',    data:C.map(c=>c.dCS),               backgroundColor:'#B85C38', borderRadius:2},
+    {label:'IPS',                data:C.map(c=>c.dIPS),              backgroundColor:'#C8922A', borderRadius:2},
+    {label:'Sindicatos',         data:C.map(c=>c.dSi),               backgroundColor:'#3A4E5C', borderRadius:2},
+    {label:'Juicios/contingentes',data:C.map(c=>+(c.dJu+(c.dAprox||0)).toFixed(2)), backgroundColor:'#8C6218', borderRadius:2},
+    {label:'Intimaciones',       data:C.map(c=>c.dInt||0),           backgroundColor:'#7A3520', borderRadius:2},
+  ]}, options:{ ...OPT, scales:{ x:{stacked:true,ticks:{font:{size:10.5},maxRotation:30}}, y:{stacked:true,ticks:{callback:v=>'$'+v+'M',font:{size:10.5}}} } } });
+}
+
+/* ── NAV ── */
+function showPanel(id,btn) {
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+/* ── INIT ── */
+buildKpiResumen(); buildBarsAporte(); buildChartIngresosResumen();
+buildKpiCierre(); buildCierreGrid(); buildChartCierre();
+buildKpiDeudas(); buildTablaDeudas(); buildChartDeudas();
+</script>
+</body>
+</html>
